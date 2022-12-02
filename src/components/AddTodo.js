@@ -9,8 +9,7 @@ function AddTodo(props) {
         setInput(e.target.value);
     };
 
-    const handleSubmit = e => {
-        e.preventDefault();
+    const handleSubmit = () => {
          props.onSubmit({
              id: Math.floor(Math.random() * 10000),
              text: input
