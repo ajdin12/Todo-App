@@ -5,7 +5,30 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { TextField } from "@mui/material";
+import styled from 'styled-components';
 
+const Mydiv = styled.div`
+display: flex ;
+justify-content: space-between;
+padding-left: 50px;
+padding-right: 50px;
+`;
+const DeleteBox = styled.div`
+width: 150px;
+height: 50px;
+background-color: white;
+position: absolute;
+margin-left: 620px;
+margin-top: 30px;
+border-style: groove;
+border-radius: 10px;
+display: grid;
+justify-content: center;
+`;
+const DeleteConfermationBox = styled.div`
+display: flex;
+justify-content: space-between;
+`;
 
 const Todo = ({todos, removeTodo, completeTodo, editTodo}) => {
     const [deletePopupOpen, setDeletePopupOpen] = useState(false);
@@ -19,54 +42,52 @@ const Todo = ({todos, removeTodo, completeTodo, editTodo}) => {
         setEditPopupOpen(false);
         setInput('');
     }
+    const handleClosePopup = e => {
+        setEditPopupOpen(false);
+        setInput('');
+    }
 
     return (
         <div>
             {todos.map((todo, index) => (
-                <div key={index} style={{display:'flex', justifyContent: 'space-between', paddingLeft: 50, paddingRight: 50}}>
-                    <div key={todo.id}>
-                        <Checkbox onClick={() => completeTodo(todo.id)} />
-                    </div>
-                    {todo.id === editPopupOpen ?
-                        <div>
-                            <TextField 
-                                style={{paddingTop: 9, paddingBottom: 9}}
-                                fullWidth
-                                type="text" 
-                                value={input} 
-                                name="text" 
-                                onChange={handleChange}
-                                variant="standard"
-                            />
-                        </div> 
-                        :
-                        <div>
-                            <p key={todo.id}>{todo.title}{todo.text}</p>
+                <Mydiv key={index}>
+                    {todo.id !== editPopupOpen ?
+                        <div key={todo.id}>
+                                <Checkbox onClick={() => completeTodo(todo.id)} checked={todo.isComplete} />
                         </div>
+                        : ''
                     }
-                    {todo.id === deletePopupOpen ?
-                    <div style={{width: 150, height: 50, backgroundColor: 'white', position: 'absolute', marginLeft: 620, marginTop: 30, borderStyle: "groove", borderRadius: 10, display: 'grid', justifyContent: 'center'}}>
-                        <div>
-                                Are You Sure?
-                        </div>
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div onClick={() => removeTodo(todo.id)}>
-                                    Yes
+                    <div style={{width: '100%'}}>
+                        {todo.id === editPopupOpen ?
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <div>
+                                    <TextField 
+                                        style={{paddingTop: 9, paddingBottom: 9}}
+                                        fullWidth
+                                        type="text" 
+                                        value={input} 
+                                        name="text" 
+                                        onChange={handleChange}
+                                        variant="standard"
+                                    />
                                 </div>
-                                <div onClick={() => setDeletePopupOpen(false)}>
-                                    No
+                                <div style={{ paddingTop: 10, paddingLeft: 30}}>
+                                    <CheckIcon style={{paddingRight: 10}} onClick={() => handleSubmit()} />
+                                    <CloseIcon onClick={() => handleClosePopup()} />
                                 </div>
-                        </div>
-                    </div> : '' }
-                    <div>
-                        {editPopupOpen === false ?
-                            <EditIcon onClick={() => setEditPopupOpen(todo.id)} />
+                            </div> 
                             :
-                            todo.id === editPopupOpen ?
-                            <div style={{position: 'absolute', marginLeft: -200, paddingTop: 10}}>
-                                <CheckIcon style={{paddingRight: 10}} onClick={() => handleSubmit()} />
-                                <CloseIcon onClick={() => setEditPopupOpen(false)} />
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <p key={todo.id}>{todo.title}</p>
                             </div>
+                        }
+                    </div>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        {editPopupOpen === false ?
+                            <EditIcon onClick={() => {
+                                setEditPopupOpen(todo.id);
+                                setInput(todo.title);
+                            }} />
                             : ''
                         }
                         {editPopupOpen !== todo.id ?
@@ -74,7 +95,21 @@ const Todo = ({todos, removeTodo, completeTodo, editTodo}) => {
                         : ''
                         }
                     </div>
-                </div>
+                    {todo.id === deletePopupOpen ?
+                    <DeleteBox>
+                        <div>
+                                Are You Sure?
+                        </div>
+                        <DeleteConfermationBox>
+                            <div onClick={() => removeTodo(todo.id)}>
+                                Yes
+                            </div>
+                            <div onClick={() => setDeletePopupOpen(false)}>
+                                No
+                            </div>
+                        </DeleteConfermationBox>
+                    </DeleteBox> : '' }
+                </Mydiv>
             ))}
         </div>
     )

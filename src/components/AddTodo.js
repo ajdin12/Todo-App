@@ -1,6 +1,19 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
+import styled from 'styled-components';
+
+const Mydiv = styled.div`
+        margin-bottom: 30px;
+    `;
+    const Button = styled.button`
+        border-radius: 50px;
+        background-color: #800080;
+        color: white;
+        position: absolute;
+        margin-top: -17px;
+        margin-left: 300px;
+        padding: 0.50em 1.5em;
+    `;
 
 function AddTodo(props) {
     const [input, setInput] = useState('');
@@ -12,14 +25,14 @@ function AddTodo(props) {
     const handleSubmit = () => {
          props.onSubmit({
              id: Math.floor(Math.random() * 10000),
-             text: input
+             title: input
          });
         setInput('');
     };
 
     return (
         <div>
-            <div onSubmit={handleSubmit} style={{marginBottom: 30}}>
+            <Mydiv onSubmit={handleSubmit}>
                 <TextField 
                     fullWidth
                     type="text" 
@@ -28,9 +41,9 @@ function AddTodo(props) {
                     onChange={handleChange}
                     variant="outlined"
                 />
-            </div>
+            </Mydiv>
             <div>
-                <Button onClick={handleSubmit} variant="contained" style={{borderRadius: 50, backgroundColor: '#800080', position: 'absolute', marginTop: -17, marginLeft: 300}}>+ Add Todo</Button>
+                <Button onClick={handleSubmit}>+ Add Todo</Button>
             </div>
        </div>
     );
